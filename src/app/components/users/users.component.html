@@ -1,16 +1,16 @@
-<p>{{user.name}}</p>
+<!-- <p>{{user.name}}</p>
 <div>
     <label>name:
         <input [(ngModel)]="user.name" placeholder="name"/>
     </label>
-</div>
+</div> -->
 <div>
-    <h2>My Users</h2>
-    <ul class="users">
-        <li *ngFor="let user of users">
-            {{user.firstName}} {{user.lastName}} 
-            <br>
-            {{user.email}} 
-        </li>
-    </ul>
+    <h2>Users</h2>
+    <table>
+        <div *ngFor="let user of users; let i=index">
+            <tr><td style="font-style: italic;">{{i+1}} {{user.firstName}} {{user.lastName}}</td></tr>
+            <tr><td>{{user.email}}</td></tr>
+            <tr *ngFor="let post of user.posts"><td>{{post}}</td></tr>
+        </div>
+    </table>
 </div>

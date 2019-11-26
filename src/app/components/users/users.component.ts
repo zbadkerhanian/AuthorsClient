@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
-import { Hero } from '../../models/hero';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -16,7 +15,6 @@ export class UsersComponent implements OnInit {
     name: 'admin'
   }
   users: User[];
-  heroes: Hero[];
 
   constructor(private userService: UserService) { }
 

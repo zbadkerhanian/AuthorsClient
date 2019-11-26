@@ -1,38 +1,54 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Post } from '../models/post';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { OktaAuthService } from '@okta/okta-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
 
-  constructor(private http: HttpClient,
+  constructor(private oktaAuth: OktaAuthService,
+    private http: HttpClient,
     private messageService: MessageService) { }
 
-  private usersUrl = 'https://localhost:44387/api/Posts/Get';  // URL to web api
+  private getUrl = 'https://localhost:44387/api/Posts/Get';  // URL to web api
+  private postUrl = 'https://localhost:44387/api/Posts/Post';  // URL to web api
+  private accessToken;
+  private httpOptions;
 
-  httpOptions = {
-    headers: new HttpHeaders(
-    { 
-      'Content-Type': 'application/json'
-    })
-  };
+  // httpOptions = {
+  //   headers: new HttpHeaders(
+  //   { 
+  //     'Content-Type': 'application/json',
+  //   })
+  // };
+
+  async setHttpOptions(){
+    this.accessToken = await this.oktaAuth.getAccessToken();
+    console.log(this.accessToken);
+    this.httpOptions = new HttpHeaders({
+      Authorization: 'Bearer ' + this.accessToken
+    });
+  }
 
   getPosts(): Observable<Post[]> {
-
-    // return this.http.get(this.commentsUrl)
-    //                     // ...and calling .json() on the response to return data
-    //                      .map((res:Response) => res.json())
-    //                      //...errors if any
-    //                      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-
-    return this.http.get<Post[]>(this.usersUrl)
+    this.setHttpOptions();
+    
+    return this.http.get<Post[]>(this.getUrl)
       .pipe(
-        catchError(this.handleError<Post[]>('getUsers', []))
+        catchError(this.handleError<Post[]>('getPosts', []))
+      );
+  }
+
+  post(post): Observable<any>{
+    console.log("in post service posting " + post);
+    return this.http.post(this.postUrl, post)
+      .pipe(
+        catchError(this.handleError<Post[]>('postPost', []))
       );
   }
 
@@ -50,7 +66,6 @@ export class PostService {
     };
   }
 
-  /** Log a HeroService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`PostService: ${message}`);
   }

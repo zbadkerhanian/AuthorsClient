@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Hero } from '../models/hero';
 import { User } from '../models/user';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
@@ -63,7 +62,6 @@ export class UserService {
     };
   }
 
-  /** Log a HeroService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`UserService: ${message}`);
   }

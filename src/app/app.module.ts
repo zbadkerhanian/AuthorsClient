@@ -6,8 +6,17 @@ import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
 import { MessagesComponent } from './components/messages/messages.component'; 
 import { PostsComponent } from './components/posts/posts.component'; 
-import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { FormsModule, ReactiveFormsModule} from '@angular/forms'; // <-- NgModel lives here
 import { HttpClientModule } from '@angular/common/http';
+import { OktaAuthModule, OktaCallbackComponent } from '@okta/okta-angular';
+
+
+const config = {
+  issuer: 'https://dev-878513.okta.com',
+  redirectUri: 'http://localhost:4200/implicit/callback',
+  clientId: '0oa1y61un3b0skxmF357',
+  pkce: true
+}
 
 
 
@@ -22,7 +31,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    OktaAuthModule.initAuth(config)
   ],
   providers: [],
   bootstrap: [AppComponent]

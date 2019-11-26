@@ -1,10 +1,30 @@
 <div>
-    <h2>My Posts</h2>
+    <h2>Posts</h2>
     <ul class="posts">
         <li *ngFor="let post of posts">
             {{post.firstName}} {{post.lastName}} 
             <br>
+            {{post.email}}
+            <br>
             {{post.body}} 
         </li>
     </ul>
+</div>
+<br>
+
+<div class="card-body">
+<!-- <div class="card-body" *ngIf="AppComponent.isAuthenticated"> -->
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit(postForm.value)">
+        <div class="form-group">
+            <label for="replyFormComment" class="">Your Post
+                <p>
+                    <textarea class="form-control" id="replyFormComment" rows="5" name="post" formControlName="body"></textarea>
+                </p>
+            </label>
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-info btn-md waves-effect waves-light" type="submit">Post</button>
+        </div>
+    </form>
 </div>
