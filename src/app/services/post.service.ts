@@ -2,9 +2,11 @@ import { Injectable, OnInit } from '@angular/core';
 import { Post } from '../models/post';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { OktaAuthService } from '@okta/okta-angular';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { PostSubmit } from '../models/postSubmit';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class PostService {
 
   private getUrl = 'https://localhost:44387/api/Posts/Get';  // URL to web api
   private postUrl = 'https://localhost:44387/api/Posts/Post';  // URL to web api
+  private deleteUrl = 'https://localhost:44387/api/Posts/Delete';  // URL to web api
   private accessToken;
   private httpOptions;
 
@@ -44,11 +47,29 @@ export class PostService {
       );
   }
 
-  post(post): Observable<any>{
-    console.log("in post service posting " + post);
-    return this.http.post(this.postUrl, post)
+  post(post): Observable<Post>{
+    console.log("in post service posting " + JSON.stringify(post));
+    return this.http.post<Post>(this.postUrl, post)
       .pipe(
-        catchError(this.handleError<Post[]>('postPost', []))
+        catchError(this.handleError<Post>('postPost'))
+      );
+  }
+
+  delete(id): Observable<any>{
+    console.log("I am in service");
+    console.log(id);
+    this.httpOptions = {
+        headers:
+        { 
+          'Content-Type': 'text/plain',
+        },
+        params: {
+          'id': id
+        }
+    };
+    return this.http.delete(this.deleteUrl, this.httpOptions)
+      .pipe(
+        catchError(this.handleError('deletePost'))
       );
   }
 
