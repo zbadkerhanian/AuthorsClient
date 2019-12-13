@@ -4,6 +4,8 @@ import { PostService } from '../../services/post.service';
 import { FormBuilder } from '@angular/forms';
 import { AppComponent } from '../../app.component'
 import { PostSubmit } from 'src/app/models/postSubmit';
+import { Author } from 'src/app/models/author';
+import { AuthorsComponent } from '../authors/authors.component';
 
 @Component({
   selector: 'app-posts',
@@ -15,6 +17,8 @@ export class PostsComponent implements OnInit {
   posts: Post[];
 
   postForm;
+
+  authors: Author[];
 
   isAuthenticated: boolean;
 
@@ -36,15 +40,32 @@ export class PostsComponent implements OnInit {
   
 
   ngOnInit() {
-    this.getPosts();
+    this.postService.setToken().subscribe(()=>{
+      this.getPosts();
+      this.getAuthors();
+    });
+
   }
 
 
 
   getPosts(): void {
     this.postService.getPosts().subscribe(posts => {
-      console.log(posts);
+      //console.log(posts);
       this.posts = posts;
+    });
+  }
+
+  getAuthors(): void {
+    this.postService.getAuthors().subscribe(authors => {
+      //console.log(authors);
+      this.authors = authors;
+    });
+  }
+
+  delete(post){
+     this.postService.delete(post.id).subscribe(post => {
+      console.log("Return from service. Deleted: " + JSON.stringify(post.body));
     });
   }
 
@@ -52,16 +73,5 @@ export class PostsComponent implements OnInit {
     console.warn('Your post has been submitted', post);
     this.postService.post(post).subscribe(res => console.log("response from post: " + JSON.stringify(res)));
     this.postForm.reset();
-  }
-
-  delete(post){
-    console.log("clicked delete");
-    
-    console.log(post.id);
-
-    
-    this.postService.delete(post.id).subscribe(body => {
-      console.log("Return from service. Deleted post ID: " + body);
-    });
   }
 }

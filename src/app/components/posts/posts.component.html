@@ -11,10 +11,10 @@
                 <td style="width:auto">
                     {{post.body}} 
                 </td>
-                <td style="width:auto">
-                        {{post.id}} 
-                </td>
-                <td>
+                <!-- <td style="width:auto">
+                    {{post.id}} 
+                </td> -->
+                <td style="vertical-align:middle">
                     <button (click)="delete(post)">Delete</button>
                 </td>
             </tr>
@@ -27,16 +27,21 @@
 <h2>Create a Post</h2>
 <!-- <div class="card-body" *ngIf="isAuthenticated"> -->
 <div class="card-body" >
-    <form [formGroup]="postForm" (ngSubmit)="onSubmit(postForm.value)" ngNativeValidate>
-        <div class="form-group">
-            <label for="replyFormComment" class="">Email of Author
+    <form id="postForm" [formGroup]="postForm" (ngSubmit)="onSubmit(postForm.value)" ngNativeValidate>
+        <div>
+            <label>Email of Author
                 <p>
-                    <input name="email" type="email" placeholder="example@example.com" formControlName="email" required/>
+                    <select formControlName="email">
+                        <option *ngFor="let author of authors" [value]="author.email">{{author.firstName}} {{author.lastName}}</option>
+                    </select>
                 </p>
+                <!-- <p>
+                    <input name="email" type="email" placeholder="example@example.com" formControlName="email" required/>
+                </p> -->
             </label>
-            <label for="replyFormComment" class="">Post Body
+            <label class="">Post Body
                 <p>
-                    <textarea class="form-control" id="replyFormComment" rows="5" name="post" formControlName="body" required></textarea>
+                    <textarea class="form-control" rows="5" name="body" formControlName="body" required></textarea>
                 </p>
             </label>
         </div>

@@ -1,0 +1,61 @@
+<!-- <p>{{author.name}}</p>
+<div>
+    <label>name:
+        <input [(ngModel)]="author.name" placeholder="name"/>
+    </label>
+</div> -->
+<div>
+    <h2>Authors</h2>
+    <table>
+        <span *ngFor="let author of authors; let i=index">
+            <tr style="font-style: italic; background-color: lightblue;">
+                <td>
+                    {{i+1}} {{author.firstName}} {{author.lastName}}
+                    <br>
+                    {{author.email}}
+                </td>
+                <!-- <td style="vertical-align:middle">
+                    <button (click)="delete(author)">Delete</button>
+                </td> -->
+            </tr>
+            <tr *ngFor="let post of author.posts">
+                <td>
+                    {{post}}
+                </td>
+            </tr>
+        </span>
+    </table>
+</div>
+
+<h2>Create an Author</h2>
+<!-- <div class="card-body" *ngIf="isAuthenticated"> -->
+<div class="card-body">
+    <form [formGroup]="authorForm" (ngSubmit)="onSubmit(authorForm.value)" ngNativeValidate>
+        <div>
+            <label>First Name
+                <p>
+                    <input style="font:inherit" name="firstName" type="text" formControlName="firstName" required/>
+                </p>
+            </label>
+            <label>Last Name
+                <p>
+                    <input style="font:inherit" name="lastName" type="text" formControlName="lastName" required/>
+                </p>
+            </label>
+            <label>Email
+                <p>
+                    <input name="email" type="email" placeholder="example@example.com" formControlName="email" required/>
+                </p>
+            </label>
+            <!-- <label for="replyFormComment" class="">Post Body
+                <p>
+                    <textarea class="form-control" id="replyFormComment" rows="5" name="post" formControlName="body" required></textarea>
+                </p>
+            </label> -->
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-info btn-md waves-effect waves-light" type="submit">Create</button>
+        </div>
+    </form>
+</div>

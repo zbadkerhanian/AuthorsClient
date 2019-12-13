@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UsersComponent } from './components/users/users.component';
+import { AuthorsComponent } from './components/authors/authors.component';
 import { MessagesComponent } from './components/messages/messages.component'; 
 import { PostsComponent } from './components/posts/posts.component'; 
 import { FormsModule, ReactiveFormsModule} from '@angular/forms'; // <-- NgModel lives here
@@ -23,7 +23,7 @@ const config = {
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent,
+    AuthorsComponent,
     MessagesComponent,
     PostsComponent
   ],

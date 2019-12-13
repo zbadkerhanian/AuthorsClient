@@ -7,6 +7,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { OktaAuthService } from '@okta/okta-angular';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { PostSubmit } from '../models/postSubmit';
+import { from } from 'rxjs';
+import { Author } from '../models/author';
 
 @Injectable({
   providedIn: 'root'
@@ -18,32 +20,43 @@ export class PostService {
     private messageService: MessageService) { }
 
   private getUrl = 'https://localhost:44387/api/Posts/Get';  // URL to web api
+  private getAuthorsUrl = 'https://localhost:44387/api/Authors/Get';  // URL to web api
   private postUrl = 'https://localhost:44387/api/Posts/Post';  // URL to web api
   private deleteUrl = 'https://localhost:44387/api/Posts/Delete';  // URL to web api
-  private accessToken;
-  private httpOptions;
+  public accessToken;
+  
 
-  // httpOptions = {
-  //   headers: new HttpHeaders(
-  //   { 
-  //     'Content-Type': 'application/json',
-  //   })
-  // };
+  returnHeaders(){
+    if(this.accessToken == null){
+      return {
+        'Content-Type': 'application/json'
+      }
+    }
+    return{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.accessToken
+    }
+  }
 
-  async setHttpOptions(){
-    this.accessToken = await this.oktaAuth.getAccessToken();
-    console.log(this.accessToken);
-    this.httpOptions = new HttpHeaders({
-      Authorization: 'Bearer ' + this.accessToken
-    });
+  setToken(): Observable<void> {
+    return from(this.oktaAuth.getAccessToken().then(res => {
+      this.accessToken = res;
+    }));
+    
   }
 
   getPosts(): Observable<Post[]> {
-    this.setHttpOptions();
-    
-    return this.http.get<Post[]>(this.getUrl)
+    return this.http.get<Post[]>(this.getUrl, {headers:this.returnHeaders()})
       .pipe(
         catchError(this.handleError<Post[]>('getPosts', []))
+      );
+    
+  }
+
+  getAuthors(): Observable<Author[]> {
+    return this.http.get<Author[]>(this.getAuthorsUrl, {headers:this.returnHeaders()})
+      .pipe(
+        catchError(this.handleError<Author[]>('getAuthors', []))
       );
   }
 
@@ -56,18 +69,7 @@ export class PostService {
   }
 
   delete(id): Observable<any>{
-    console.log("I am in service");
-    console.log(id);
-    this.httpOptions = {
-        headers:
-        { 
-          'Content-Type': 'text/plain',
-        },
-        params: {
-          'id': id
-        }
-    };
-    return this.http.delete(this.deleteUrl, this.httpOptions)
+    return this.http.delete(this.deleteUrl, {headers:this.returnHeaders(), params:{id}})
       .pipe(
         catchError(this.handleError('deletePost'))
       );

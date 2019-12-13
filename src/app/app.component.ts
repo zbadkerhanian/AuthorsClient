@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OktaAuthService } from '@okta/okta-angular';
+import {PostService} from './services/post.service';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,12 @@ export class AppComponent {
   title = 'angular586';
   public isAuthenticated: boolean;
 
-  constructor(public oktaAuth: OktaAuthService) {
+  constructor(public oktaAuth: OktaAuthService, private postService:PostService) {
     // Subscribe to authentication state changes
     this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean)  => this.isAuthenticated = isAuthenticated
+      (isAuthenticated: boolean)  => {
+        this.isAuthenticated = isAuthenticated
+      }
     );
   }
 
