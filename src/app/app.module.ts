@@ -13,7 +13,7 @@ import { OktaAuthModule, OktaCallbackComponent } from '@okta/okta-angular';
 
 const config = {
   issuer: 'https://dev-878513.okta.com',
-  redirectUri: 'http://localhost:4200/implicit/callback',
+  redirectUri: 'https://authorsandblogs.com/implicit/callback',
   clientId: '0oa1y61un3b0skxmF357',
   pkce: true
 }

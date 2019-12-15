@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Post } from '../models/post';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -18,11 +18,11 @@ export class PostService {
   constructor(private oktaAuth: OktaAuthService,
     private http: HttpClient,
     private messageService: MessageService) { }
-
-  private getUrl = 'https://localhost:44387/api/Posts/Get';  // URL to web api
-  private getAuthorsUrl = 'https://localhost:44387/api/Authors/Get';  // URL to web api
-  private postUrl = 'https://localhost:44387/api/Posts/Post';  // URL to web api
-  private deleteUrl = 'https://localhost:44387/api/Posts/Delete';  // URL to web api
+  private baseUrl = 'https://api.authorsandblogs.com' // URL to web api
+  private getUrl = this.baseUrl + '/api/Posts/Get';  
+  private getAuthorsUrl = this.baseUrl + '/api/Authors/Get';
+  private postUrl = this.baseUrl + '/api/Posts/Post';
+  private deleteUrl = this.baseUrl + '/api/Posts/Delete';
   public accessToken;
   
 
@@ -46,7 +46,7 @@ export class PostService {
   }
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.getUrl, {headers:this.returnHeaders()})
+    return this.http.get<Post[]>(this.getUrl)
       .pipe(
         catchError(this.handleError<Post[]>('getPosts', []))
       );
@@ -54,18 +54,18 @@ export class PostService {
   }
 
   getAuthors(): Observable<Author[]> {
-    return this.http.get<Author[]>(this.getAuthorsUrl, {headers:this.returnHeaders()})
+    return this.http.get<Author[]>(this.getAuthorsUrl)
       .pipe(
         catchError(this.handleError<Author[]>('getAuthors', []))
       );
   }
 
-  post(post): Observable<Post>{
-    console.log("in post service posting " + JSON.stringify(post));
-    return this.http.post<Post>(this.postUrl, post)
+  post(post): Observable<any>{
+    return this.http.post<any>(this.postUrl, post, {headers:this.returnHeaders()})
       .pipe(
-        catchError(this.handleError<Post>('postPost'))
+            catchError(this.handleError<any>('postPost'))
       );
+      
   }
 
   delete(id): Observable<any>{
@@ -79,13 +79,12 @@ export class PostService {
     return (error: any): Observable<T> => {
   
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      //console.error(error); // log to console instead
   
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
   
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
+      return throwError(error);
     };
   }
 

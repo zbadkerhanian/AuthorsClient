@@ -71,7 +71,8 @@ export class PostsComponent implements OnInit {
 
   onSubmit(post){
     console.warn('Your post has been submitted', post);
-    this.postService.post(post).subscribe(res => console.log("response from post: " + JSON.stringify(res)));
+    this.postService.post(post).subscribe(res => console.log("response from post: " + JSON.stringify(res)),
+        err => alert(err.error.message));
     this.postForm.reset();
   }
 }
