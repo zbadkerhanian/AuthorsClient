@@ -1,6 +1,6 @@
 # 586Angular
 
-This is the front end repository.
+This is the front end repository hosted with the domain "https://authorsandblogs.com".
 
 The app is using Okta Authentication to authenticate the user and return the JWT.
 
