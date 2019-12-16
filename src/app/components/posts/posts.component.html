@@ -29,7 +29,7 @@
 <div class="card-body" >
     <form id="postForm" [formGroup]="postForm" (ngSubmit)="onSubmit(postForm.value)" ngNativeValidate>
         <div>
-            <label>Email of Author
+            <label>Name of Author
                 <p>
                     <select formControlName="email">
                         <option *ngFor="let author of authors" [value]="author.email">{{author.firstName}} {{author.lastName}}</option>

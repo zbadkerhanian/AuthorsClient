@@ -18,7 +18,8 @@ export class PostService {
   constructor(private oktaAuth: OktaAuthService,
     private http: HttpClient,
     private messageService: MessageService) { }
-  private baseUrl = 'https://api.authorsandblogs.com' // URL to web api
+  private baseUrl = 'https://api.authorsandblogs.com'; // URL to web api
+  //private baseUrl ='https://localhost:44392';
   private getUrl = this.baseUrl + '/api/Posts/Get';  
   private getAuthorsUrl = this.baseUrl + '/api/Authors/Get';
   private postUrl = this.baseUrl + '/api/Posts/Post';
@@ -69,7 +70,7 @@ export class PostService {
   }
 
   delete(id): Observable<any>{
-    return this.http.delete(this.deleteUrl, {headers:this.returnHeaders(), params:{id}})
+    return this.http.delete(this.deleteUrl, {headers:{}, params:{id}})
       .pipe(
         catchError(this.handleError('deletePost'))
       );

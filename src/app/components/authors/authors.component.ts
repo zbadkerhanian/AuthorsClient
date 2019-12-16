@@ -62,7 +62,10 @@ export class AuthorsComponent implements OnInit {
 
   onSubmit(author){
     console.warn('Creating new author', author);
-    this.authorService.post(author).subscribe(res => console.log("New author's ID: " + JSON.stringify(res)),
+    this.authorService.post(author).subscribe(res => {
+      console.log("New author's ID: " + JSON.stringify(res));
+      this.getAuthors();
+    },
         err => alert(err.error));
     this.authorForm.reset();
   }

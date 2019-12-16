@@ -66,12 +66,18 @@ export class PostsComponent implements OnInit {
   delete(post){
      this.postService.delete(post.id).subscribe(post => {
       console.log("Return from service. Deleted: " + JSON.stringify(post.body));
+      this.getPosts();
+      this.getAuthors();
     });
   }
 
   onSubmit(post){
     console.warn('Your post has been submitted', post);
-    this.postService.post(post).subscribe(res => console.log("response from post: " + JSON.stringify(res)),
+    this.postService.post(post).subscribe(res => {
+      console.log("response from post: " + JSON.stringify(res))
+      this.getPosts();
+      this.getAuthors();
+    },
         err => alert(err.error.message));
     this.postForm.reset();
   }

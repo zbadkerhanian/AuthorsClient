@@ -18,6 +18,7 @@ export class AuthorService {
               private messageService: MessageService) { }
 
   private baseUrl ='https://api.authorsandblogs.com'
+  //private baseUrl ='https://localhost:44392';
   private getUrl = this.baseUrl + '/api/Authors/Get';  // URL to web api
   private postUrl = this.baseUrl + '/api/Authors/Post';  
   //private deleteUrl = this.baseUrl + '/api/Authors/Delete';

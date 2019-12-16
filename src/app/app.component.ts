@@ -8,7 +8,7 @@ import {PostService} from './services/post.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular586';
+  title = 'Authors and Blogs';
   public isAuthenticated: boolean;
 
   constructor(public oktaAuth: OktaAuthService, private postService:PostService) {
